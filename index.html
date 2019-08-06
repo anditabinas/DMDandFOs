@@ -10,11 +10,6 @@
 	<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet" type="text/css">
 	<link href="https://rawgit.com/k4r573n/leaflet-control-osm-geocoder/master/Control.OSMGeocoder.css" rel="stylesheet">
-	<link href="https://rawgit.com/mapshakers/leaflet-control-window/master/src/L.Control.Window.css" rel="stylesheet">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.67.0/dist/L.Control.Locate.min.css" rel="stylesheet">	
-	
-	
 </head>
 <body>
 	<div id="wrapper">
@@ -56,11 +51,6 @@
 	<script src="https://rawgit.com/k4r573n/leaflet-control-osm-geocoder/master/Control.OSMGeocoder.js">
 	</script> 
 	<script>
-	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-	<script charset="utf-8" src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.67.0/dist/L.Control.Locate.min.js"></script> 
-	<script src="https://rawgit.com/mapshakers/leaflet-control-window/master/src/L.Control.Window.js"></script> 	
-	
-	
 	       //TODO: Change to your username, insert function on Carto, and Carto tablename
 	       var config = {
 	           cartoUsername : "anditabinas",
@@ -91,7 +81,6 @@
 	       var sqlQuery = "SELECT the_geom, name, address, number, rictmu, notes FROM " + config.cartoTablename;
 	       // Create Leaflet map object
 	             var map = L.map('map', { center: config.mapcenter, zoom: 6});   // Creates the Leaflet map object
-		map.addControl(new L.Control.Fullscreen());
 	       // Add Tile Layer basemap
 	       // Find your own at https://leaflet-extras.github.io/leaflet-providers/preview/
 	       var Mapbox = L.tileLayer('https://api.mapbox.com/styles/v1/anditabinas/cjyjxvflr0f831cmonavkn8fe/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kaXRhYmluYXMiLCJhIjoiY2plejI3aHp3MDV3MjMzcW9ydXl2bHNmZiJ9.9h6j7BbkM-PUtK0zaZ1iUg', {
@@ -101,17 +90,8 @@
 	       });
 	       Mapbox.addTo(map);      
 	       
-
 	               var osmGeocoder = new L.Control.OSMGeocoder({position: 'topleft'}); //Adds Search toolbar; OSMGeocoder       
 	             map.addControl(osmGeocoder);
-		
-	          var lc = L.control.locate({  //Adds Locate Control; to locate the user's location on the map
-	                  position: 'topleft',
-	              icon: 'fas fa-search-location'
-	          });     
-	          map.addControl(lc);		
-
-
 	       //Fetches
 	       var getData = "https://" + config.cartoUsername + ".carto.com/api/v2/sql?format=GeoJSON&q=" + sqlQuery;
 	       function getGeoJSON() {
@@ -159,7 +139,7 @@
 	               of: "#map"
 	           },
 	           buttons: {
-	               "Submit": setData,
+	               "Share": setData,
 	               Cancel: function () {
 	                   dialog.dialog("close");
 	                   refreshLayer();             
