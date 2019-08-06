@@ -1,4 +1,4 @@
-@import url(//fonts.googleapis.com/css?family=Lalezar);
+@import url(//fonts.googleapis.com/css?family=Graduate);
 
 html {
   height: 100%;
@@ -6,7 +6,7 @@ html {
 
 body {
   margin: 0px;
-  font-family: 'Open Sans', Lalezar, sans-serif;
+  font-family: 'Open Sans', Graduate, sans-serif;
 }
 
 img {
@@ -56,7 +56,7 @@ h2 {
   float: left;
   text-align: center;
   margin-bottom: 2px;
-  font-family: 'Open Sans', Lalezar, sans-serif;
+  font-family: 'Open Sans', Graduate;
 }
 
 #form {
