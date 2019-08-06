@@ -10,6 +10,11 @@
 	<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet" type="text/css">
 	<link href="https://rawgit.com/k4r573n/leaflet-control-osm-geocoder/master/Control.OSMGeocoder.css" rel="stylesheet">
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.67.0/dist/L.Control.Locate.min.css" rel="stylesheet">	
+	
+	
 </head>
 <body>
 	<div id="wrapper">
@@ -46,6 +51,8 @@
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
 	<script src="https://rawgit.com/k4r573n/leaflet-control-osm-geocoder/master/Control.OSMGeocoder.js"></script>
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+	<script src="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script> 
+	<script charset="utf-8" src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.67.0/dist/L.Control.Locate.min.js"></script> 	
 	
 	<script>
 	       //TODO: Change to your username, insert function on Carto, and Carto tablename
@@ -91,6 +98,13 @@
 	       
 	               var osmGeocoder = new L.Control.OSMGeocoder({position: 'topleft'}); //Adds Search toolbar; OSMGeocoder       
 	             map.addControl(osmGeocoder);
+		
+	          var lc = L.control.locate({  //Adds Locate Control; to locate the user's location on the map
+	                  position: 'topleft',
+	              icon: 'fa fa-hand-o-down'
+	          });     
+	          map.addControl(lc);		
+		
 	       //Fetches
 	       var getData = "https://" + config.cartoUsername + ".carto.com/api/v2/sql?format=GeoJSON&q=" + sqlQuery;
 	       function getGeoJSON() {
