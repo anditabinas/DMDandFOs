@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <!--Based on https://github.com/mjfoster83/web-map-workshop/blob/master/7_advancedMapping_CartoDB/index-completed.html-->
 <html>
   <head>
 	<meta charset="utf-8" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">	  
-    <title>DSWD Field Officess</title>
+    <title>ICTMS</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css"
   integrity="sha384-99ZJFcuBCh9c/V/+8YwDX/TUGG8JWMG+gKFJWzk0BZP3IoDMN+pLGd3/H0yjg4oa"
   crossorigin=""/>
@@ -18,25 +19,23 @@
   <body>
     <div id="wrapper">
       <div id="header">
-        <h1>DSWD FOs</h1>             
+        <h1>Field Office Inputs</h1>      
 	</div>
 	<div id="controls">
-        <p>Click the pins to show details. Please also add your FO's inputs and location. <p><input type="button" onclick="startEdits()" value="Click to add input."> <input type="button" onclick="stopEdits()" value="Stop Your Editing Session">
+        <p>Click the pins to read stories, or share yours. <p><input type="button" onclick="startEdits()" value="Click to add your story."> <input type="button" onclick="stopEdits()" value="Stop Your Editing Session">
       	</div>
       </div>
       <div id="map"></div>
     </div>
 
-    <div id="dialog" title="Add data">     
+    <div id="dialog" title="Add your input.">     
       <form>
         <fieldset style="border: none;">
           <ul style="list-style-type: none; padding-left: 0px">
-            <li><label for="fieldoffice">Field Office</label></li>
-            <li><input type="text" name="fieldoffice" id="fieldoffice" placeholder="Field Office" size="40" type="text"></li>
             <li><label for="fname">Name</label></li>
-            <li><input type="text" name="fname" id="fname" placeholder="Your name (Optional)" size="40" type="text"></li>		  
-            <li><label for="inputs">Your Inputs</label></li>
-            <li><textarea cols="40" id="inputs" name="inputs" placeholder="Add exact address of FO and then add your inputs below it." rows="5"></textarea></li>
+            <li><input type="text" name="fname" id="fname" placeholder="Field Office" size="40" type="text"></li>
+            <li><label for="notes">Address and Inputs</label></li>
+            <li><textarea cols="40" id="notes" name="notes" placeholder="Please add your FO's complete address and inputs below it" rows="5"></textarea></li>
           </ul>
           <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -79,7 +78,7 @@
 		// Create Global Variable to hold Carto points
 		var cartoData = null;
 		// Write SQL Selection Query to be Used on Carto Table
-		var sqlQuery = "SELECT the_geom, fieldoffice, name, inputs FROM " + config.cartoTablename;
+		var sqlQuery = "SELECT the_geom, name, notes FROM " + config.cartoTablename;
 		// Create Leaflet map object
 	          var map = L.map('map', { center: config.mapcenter, zoom: 6});   // Creates the Leaflet map object
 		// Add Tile Layer basemap
@@ -102,7 +101,7 @@
 			$.getJSON(getData, function (data) {
 				cartoData = L.geoJson(data, {
 					onEachFeature: function (feature, layer) {
-						layer.bindPopup(feature.properties.fieldoffice+ '<br> ' + feature.properties.name+ '<br> ' + feature.properties.inputs + '');
+						layer.bindPopup(feature.properties.name+ '<br> ' + feature.properties.notes + '');
 						
 						//('' '<b>Name:</b>' + feature.properties.name + '<br> ' + feature.properties.doctor +  '<br> ' + feature.properties.address + '<br> ' + feature.properties.contactnum + '<br> ' + feature.properties.fee + '<br> ' + feature.properties.website + '<br> ' + feature.properties.hours + '<br> ' + feature.properties.notes + '');
 					}
@@ -160,18 +159,16 @@
 			setData();
 		});
 		function setData() {
-			var enteredFieldoffice = "'" + fieldoffice.value + "'",
-				enteredFname = "'" + fname.value + "'";			    	
-				enteredInputs = "'" + inputs.value + "'";				
+			var enteredFname = "'" + fname.value + "'",
+				enteredNotes = "'" + notes.value + "'";				
 			drawnItems.eachLayer(function (layer) {
 			//Convert the drawing to a GeoJSON to pass to the Carto sql database
 				var drawing = "'" + JSON.stringify(layer.toGeoJSON().geometry) + "'",
 				  //Construct the SQL query to insert data from the three parameters: the drawing, the input username, and the input description of the drawn shape
 					sql = "SELECT " + config.cartoInsertFunction + "(";
 				sql += drawing;
-				sql += "," + enteredFieldoffice;				
 				sql += "," + enteredFname;
-				sql += "," + enteredInputs;				
+				sql += "," + enteredNotes;				
 				sql += ");";
 				console.log(drawing);
 				//Sending the data
@@ -193,9 +190,8 @@
 				* requerying the database (see the refreshLayer() function for an alternate way of doing this) 
 				*/
 				var newData = layer.toGeoJSON();
-				  newData.properties.fieldoffice = fieldoffice.value;
-				  newData.properties.name = fname.value;				
-				  newData.properties.notes = inputs.value;					
+				  newData.properties.name = fname.value;
+				  newData.properties.notes = notes.value;					
 				cartoData.addData(newData);
 			});
 			
