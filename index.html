@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
-	<title>Mental Health aWHEREness Stories</title>
+	<title>ICTSM</title>
 	<link href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css" rel="stylesheet">
 	<link href="//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.12/leaflet.draw.css" rel="stylesheet">
 	<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
@@ -28,9 +28,14 @@
 				<ul style="list-style-type: none; padding-left: 0px">
 					<li><label for="fname">F.O.</label></li>
 					<li><input id="fname" name="fname" placeholder="Field Office" size="40" type="text"></li>
+					<li><label for="address">Address</label></li>
+					<li><input id="address" name="address" placeholder="Field Office Address" size="40" type="text"></li>
+					<li><label for="number">Contact Number</label></li>
+					<li><input id="number" name="number" placeholder="Contact Number" size="40" type="text"></li>	
+					<li><label for="rictmu">RICTMU details</label></li>
+					<li><input id="rictmu" name="rictmu" placeholder="RICTMU Head and Email Address" size="40" type="text"></li>	
 					<li><label for="notes">Inputs</label></li>
-					<li>
-					<textarea cols="40" id="notes" name="notes" placeholder="Please input your FO's complete address and your questions/feedback below it." rows="5"></textarea></li>
+					<li><textarea cols="40" id="notes" name="notes" placeholder="Please input your FO's complete address and your questions/feedback below it." rows="5"></textarea></li>
 				</ul><input style="position:absolute; top:-1000px" tabindex="-1" type="submit">
 			</fieldset>
 		</form>
@@ -73,7 +78,7 @@
 	       // Create Global Variable to hold Carto points
 	       var cartoData = null;
 	       // Write SQL Selection Query to be Used on Carto Table
-	       var sqlQuery = "SELECT the_geom, name, notes FROM " + config.cartoTablename;
+	       var sqlQuery = "SELECT the_geom, name, address, number, rictmu, notes FROM " + config.cartoTablename;
 	       // Create Leaflet map object
 	             var map = L.map('map', { center: config.mapcenter, zoom: 6});   // Creates the Leaflet map object
 	       // Add Tile Layer basemap
@@ -96,7 +101,7 @@
 	           $.getJSON(getData, function (data) {
 	               cartoData = L.geoJson(data, {
 	                   onEachFeature: function (feature, layer) {
-	                       layer.bindPopup(feature.properties.name+ '<br> ' + feature.properties.notes + '');
+	                       layer.bindPopup(feature.properties.name+ '<br> ' + feature.properties.address+ '<br> '+ feature.properties.number + feature.properties.rictmu+ '<br> ' + '<br> ' + feature.properties.notes + '');
 	                       
 	                       //('' '<b>Name:<\/b>' + feature.properties.name + '<br> ' + feature.properties.doctor +  '<br> ' + feature.properties.address + '<br> ' + feature.properties.contactnum + '<br> ' + feature.properties.fee + '<br> ' + feature.properties.website + '<br> ' + feature.properties.hours + '<br> ' + feature.properties.notes + '');
 	                   }
@@ -155,6 +160,9 @@
 	       });
 	       function setData() {
 	           var enteredFname = "'" + fname.value + "'",
+	               enteredAddress = "'" + address.value + "'"    
+	               enteredNumber = "'" + number.value + "'"
+	               enteredRictmu = "'" + rictmu.value + "'"    		       
 	               enteredNotes = "'" + notes.value + "'";             
 	           drawnItems.eachLayer(function (layer) {
 	           //Convert the drawing to a GeoJSON to pass to the Carto sql database
@@ -163,6 +171,9 @@
 	                   sql = "SELECT " + config.cartoInsertFunction + "(";
 	               sql += drawing;
 	               sql += "," + enteredFname;
+	               sql += "," + enteredAddress;
+	               sql += "," + enteredNumber;
+	               sql += "," + enteredRictmu;			   
 	               sql += "," + enteredNotes;              
 	               sql += ");";
 	               console.log(drawing);
@@ -186,6 +197,9 @@
 	               */
 	               var newData = layer.toGeoJSON();
 	                 newData.properties.name = fname.value;
+	                 newData.properties.name = address.value;
+	                 newData.properties.name = number.value;
+	                 newData.properties.name = rictmu.value;			   
 	                 newData.properties.notes = notes.value;                   
 	               cartoData.addData(newData);
 	           });
