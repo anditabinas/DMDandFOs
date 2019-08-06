@@ -33,9 +33,9 @@
           <ul style="list-style-type: none; padding-left: 0px">
             <li><label for="fieldoffice">Field Office</label></li>
             <li><input type="text" name="fieldoffice" id="fieldoffice" placeholder="Field Office" size="40" type="text"></li>
-            <li><label for="name">Name</label></li>
-            <li><input type="text" name="name" id="name" placeholder="Your name (Optional)" size="40" type="text"></li>		  
-            <li><label for="inputs">Your Story</label></li>
+            <li><label for="fname">Name</label></li>
+            <li><input type="text" name="fname" id="fname" placeholder="Your name (Optional)" size="40" type="text"></li>		  
+            <li><label for="inputs">Your Inputs</label></li>
             <li><textarea cols="40" id="inputs" name="inputs" placeholder="Add exact address of FO and then add your inputs below it." rows="5"></textarea></li>
           </ul>
           <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
@@ -160,8 +160,8 @@
 			setData();
 		});
 		function setData() {
-			var enteredFieldoffice = "'" +fieldoffice.value + "'",
-				enteredName = "'" + name.value + "'";			    	
+			var enteredFieldoffice = "'" + fieldoffice.value + "'",
+				enteredFname = "'" + fname.value + "'";			    	
 				enteredInputs = "'" + inputs.value + "'";				
 			drawnItems.eachLayer(function (layer) {
 			//Convert the drawing to a GeoJSON to pass to the Carto sql database
@@ -170,7 +170,7 @@
 					sql = "SELECT " + config.cartoInsertFunction + "(";
 				sql += drawing;
 				sql += "," + enteredFieldoffice;				
-				sql += "," + enteredName;
+				sql += "," + enteredFname;
 				sql += "," + enteredInputs;				
 				sql += ");";
 				console.log(drawing);
@@ -194,7 +194,7 @@
 				*/
 				var newData = layer.toGeoJSON();
 				  newData.properties.fieldoffice = fieldoffice.value;
-				  newData.properties.name = name.value;				
+				  newData.properties.name = fname.value;				
 				  newData.properties.notes = inputs.value;					
 				cartoData.addData(newData);
 			});
